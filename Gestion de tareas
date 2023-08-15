@@ -1,0 +1,147 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class GestionDeTareas {
+
+    private String nombre;
+    private String fecha;
+    private boolean terminada;
+
+    public GestionDeTareas(String nombre, String fecha, boolean terminada) {
+        this.nombre = nombre;
+        this.fecha = fecha;
+        this.terminada = terminada;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public boolean isTerminada() {
+        return terminada;
+    }
+
+    public String getTipo() {
+        return "Genérica";
+    }
+}
+
+class TareasPersonales extends GestionDeTareas {
+
+    public TareasPersonales(String nombre, String fecha, boolean terminada) {
+        super(nombre, fecha, terminada);
+    }
+
+    public String getTipo() {
+        return "Personal";
+    }
+}
+
+class TareasProfesionales extends GestionDeTareas {
+
+    public TareasProfesionales(String nombre, String fecha, boolean terminada) {
+        super(nombre, fecha, terminada);
+    }
+
+    public String getTipo() {
+        return "Profesional";
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        ArrayList<GestionDeTareas> tareas = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1. Crear tarea personal");
+            System.out.println("2. Crear tarea profesional");
+            System.out.println("3. Ver tareas");
+            System.out.println("4. Buscar tarea por nombre");
+            System.out.println("5. Eliminar tarea por nombre");
+            System.out.println("6. Salir");
+            System.out.print("Seleccione una opción: ");
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); 
+            
+            switch (opcion) {
+                case 1:
+                    crearTareaPersonal(scanner, tareas);
+                    break;
+                case 2:
+                    crearTareaProfesional(scanner, tareas);
+                    break;
+                case 3:
+                    mostrarTareas(tareas);
+                    break;
+                case 4:
+                    buscarTarea(scanner, tareas);
+                    break;
+                case 5:
+                    eliminarTarea(scanner, tareas);
+                    break;
+                case 6:
+                    System.out.println("Saliendo del programa.");
+                    return;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }
+    }
+
+    public static void crearTareaPersonal(Scanner scanner, ArrayList<GestionDeTareas> tareas) {
+        System.out.print("Ingrese el nombre de la tarea personal: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Ingrese la fecha de vencimiento (YYYY-MM-DD): ");
+        String fecha = scanner.nextLine();
+        tareas.add(new TareasPersonales(nombre, fecha, false));
+        System.out.println("Tarea personal creada con éxito.");
+    }
+
+    public static void crearTareaProfesional(Scanner scanner, ArrayList<GestionDeTareas> tareas) {
+        System.out.print("Ingrese el nombre de la tarea profesional: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Ingrese la fecha de vencimiento (YYYY-MM-DD): ");
+        String fecha = scanner.nextLine();
+        tareas.add(new TareasProfesionales(nombre, fecha, false));
+        System.out.println("Tarea profesional creada con éxito.");
+    }
+
+    public static void mostrarTareas(ArrayList<GestionDeTareas> tareas) {
+        for (GestionDeTareas tarea : tareas) {
+            String estado = tarea.isTerminada() ? "Terminada" : "Pendiente";
+            System.out.println("Tarea: " + tarea.getNombre() + ", Estado: " + estado + ", Tipo: " + tarea.getTipo() + ", Fecha: " + tarea.getFecha());
+        }
+    }
+
+    public static void buscarTarea(Scanner scanner, ArrayList<GestionDeTareas> tareas) {
+        System.out.print("Ingrese el nombre de la tarea a buscar: ");
+        String nombreBuscado = scanner.nextLine();
+        for (GestionDeTareas tarea : tareas) {
+            if (tarea.getNombre().equalsIgnoreCase(nombreBuscado)) {
+                String estado = tarea.isTerminada() ? "Terminada" : "Pendiente";
+                System.out.println("Tarea encontrada: " + tarea.getNombre() + ", Estado: " + estado + ", Tipo: " + tarea.getTipo() + ", Fecha: " + tarea.getFecha());
+                return;
+            }
+        }
+        System.out.println("Tarea no encontrada.");
+    }
+
+    public static void eliminarTarea(Scanner scanner, ArrayList<GestionDeTareas> tareas) {
+        System.out.print("Ingrese el nombre de la tarea a eliminar: ");
+        String nombreEliminar = scanner.nextLine();
+        for (int i = 0; i < tareas.size(); i++) {
+            if (tareas.get(i).getNombre().equalsIgnoreCase(nombreEliminar)) {
+                tareas.remove(i);
+                System.out.println("Tarea eliminada exitosamente.");
+                return;
+            }
+        }
+        System.out.println("Tarea no encontrada.");
+    }
+}
